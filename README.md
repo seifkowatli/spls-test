@@ -1,2 +1,1 @@
-# spls-test
-Spls Test
+# Spls Test
