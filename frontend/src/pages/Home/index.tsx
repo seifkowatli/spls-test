@@ -1,9 +1,15 @@
 import { Typography } from "@mui/material"
+import { InfoBox } from "~/components"
 
 const Home = () => {
     return (
-      <Typography>Hello World !!</Typography>
-    )
+       <>
+        <InfoBox title="Hello World" icon="👋">
+          Finding the perfect things
+        </InfoBox>
+        <Typography>Hello World !!</Typography>
+      </>
+    );
   }
   
   export default Home
