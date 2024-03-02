@@ -6,7 +6,7 @@ export const APP_CONTEXT_STATE: AppState = {
     isAuthenticated: false,
     preferences: {
       lang: "en",
-      theme: "light",
+      theme: "dark",
     },
   };
   
