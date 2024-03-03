@@ -1,15 +1,20 @@
-import { Typography } from "@mui/material"
-import { InfoBox } from "~/components"
+import { Typography } from "@mui/material";
+import { Counter, InfoBox } from "~/components";
 
 const Home = () => {
-    return (
-       <>
-        <InfoBox title="Hello World" icon="👋">
-          Finding the perfect things
-        </InfoBox>
-        <Typography>Hello World !!</Typography>
-      </>
-    );
-  }
-  
-  export default Home
+  return (
+    <>
+      <Counter
+        title="Counter"
+        initialValue={10}
+        minValue={0}
+        maxValue={100}
+        step={10}
+        onValueChange={(value) => console.log(value)}
+      />
+      <Typography>Hello World !!</Typography>
+    </>
+  );
+};
+
+export default Home;
