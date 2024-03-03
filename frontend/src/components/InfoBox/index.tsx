@@ -1,21 +1,19 @@
-import { Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { FC, ReactNode } from "react";
+import { styles } from "./styles";
 
 interface InfoBoxProps {
   icon: ReactNode;
   title: string;
-  children: ReactNode;
 }
 
-const InfoBox: FC<InfoBoxProps> = ({ title, icon, children }) => {
+const InfoBox: FC<InfoBoxProps> = ({ title, icon }) => {
   return (
-    <Stack>
-      <Stack direction="row" gap={1}>
-        {icon}
+      <Stack sx={styles.root} direction="row">
+        <Box sx={{ justifySelf : "flex-start" , mr : 'auto'}}> {icon}</Box>
         <Typography variant="subtitle1">{title}</Typography>
+        <Typography sx={{ml : 'auto'}}></Typography>
       </Stack>
-      <Paper>{children}</Paper>
-    </Stack>
   );
 };
 
