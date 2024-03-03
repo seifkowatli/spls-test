@@ -1,5 +1,10 @@
 import { Home } from "./pages";
-import { AppProvider, NotificationsProvider, ThemeProvider } from "./providers";
+import {
+  AppProvider,
+  EmotionCacheProvider,
+  NotificationsProvider,
+  ThemeProvider,
+} from "./providers";
 import { ReactQueryProvider } from "./providers/react-query.provider";
 
 function App() {
@@ -7,9 +12,11 @@ function App() {
     <ReactQueryProvider>
       <AppProvider>
         <ThemeProvider>
-          <NotificationsProvider>
-            <Home />
-          </NotificationsProvider>
+          <EmotionCacheProvider>
+            <NotificationsProvider>
+              <Home />
+            </NotificationsProvider>
+          </EmotionCacheProvider>
         </ThemeProvider>
       </AppProvider>
     </ReactQueryProvider>
