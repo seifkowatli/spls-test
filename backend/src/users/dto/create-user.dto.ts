@@ -1,12 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
-  IsEnum,
   IsNotEmpty,
   IsOptional,
-  IsString,
+  IsString
 } from 'class-validator';
-import { Gender } from '../schemas/user.enums';
 
 
 //TODO add roles
