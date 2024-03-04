@@ -1,6 +1,6 @@
-import { TitledBox } from "~/components";
+import { Box } from "@mui/material";
 import ChatIcon from "~/assets/chat.svg";
-import { Box, Stack } from "@mui/material";
+import { TitledBox } from "~/components";
 import ChatBox from "./ChatBox";
 import ChatMessage from "./ChatMessage";
 import { styles } from "./styles";

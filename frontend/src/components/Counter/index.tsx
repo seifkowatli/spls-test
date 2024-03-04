@@ -1,5 +1,5 @@
 import { PlayArrow } from '@mui/icons-material';
-import { ButtonBase, InputBase, Stack, Typography } from "@mui/material";
+import { ButtonBase, Input, InputBase, Stack, Typography } from "@mui/material";
 import { ChangeEvent, FC, useState } from "react";
 import { styles } from "./styles";
 
@@ -32,7 +32,7 @@ const Counter : FC<CounterProps> = ({title , initialValue, minValue , maxValue ,
   }
 
   const handleValueChange = (e : ChangeEvent<HTMLInputElement>) => {
-    let userValue = Number(e.target.value)
+    let userValue = parseFloat(e.target.value)
     if (userValue >= minValue && userValue <= maxValue) {
       setValue(userValue)
       onValueChange(userValue)
@@ -47,11 +47,13 @@ const Counter : FC<CounterProps> = ({title , initialValue, minValue , maxValue ,
         <PlayArrow sx={styles.increaseIcon} />
       </ButtonBase>
       <InputBase 
+        type='number'
         value={value}
         size="small"        
         sx={styles.value}
         onChange={handleValueChange}
       />
+     
       <ButtonBase sx={styles.button}  onClick={handleIncrement}>
         <PlayArrow sx={styles.decreaseIcon} />
       </ButtonBase>
