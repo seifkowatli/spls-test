@@ -6,7 +6,7 @@ export type GameDocument = HydratedDocument<Game>;
 
 @Schema({ timestamps: true })
 export class Game {
-
+  
 
 }
 

@@ -31,4 +31,33 @@ export class GameGateway {
   remove(@MessageBody() id: number) {
     return this.gameService.remove(id);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('createGame')
+  async handleCreateGame(@MessageBody() { gameId, maxRounds }: { gameId: string; maxRounds: number }, client: Socket) {
+    await this.gameService.createGame(gameId, maxRounds);
+    await this.gameService.joinGame(gameId, client);
+    client.join(gameId);
+    client.emit('gameCreated', gameId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('startNextRound')
+  async handleStartNextRound(@MessageBody() gameId: string, client: Socket) {
+    await this.gameService.startNextRound(gameId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @SubscribeMessage('chat')
+  handleChat(@MessageBody() message: string, client: Socket) {
+    const roomId = Object.keys(client.rooms)[1];
+    if (roomId) {
+      this.server.to(roomId).emit('chat', { username: client.id, message });
+    }
+  }
+
+  private leaveGameRoom(client: Socket) {
+    const rooms = Object.keys(client.rooms);
+    rooms.forEach((room) => client.leave(room));
+  }
 }
