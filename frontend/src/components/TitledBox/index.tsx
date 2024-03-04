@@ -10,7 +10,7 @@ interface InfoBoxProps {
 const InfoBox: FC<InfoBoxProps> = ({ title, icon, children }) => {
   return (
     <Stack>
-      <Stack direction="row" gap={1}>
+      <Stack direction="row" gap={1} alignItems="center">
         {icon}
         <Typography variant="subtitle1">{title}</Typography>
       </Stack>
