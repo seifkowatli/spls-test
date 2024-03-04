@@ -21,6 +21,7 @@ export const styles = {
     button  : { 
         height : 23,
         width: 23,
+        minWidth : 23,
         borderRadius :1.6,
         border : '2px solid',
         borderColor : 'gray',

@@ -1,5 +1,6 @@
 import { Paper, Stack, Typography } from "@mui/material";
 import { FC, ReactNode } from "react";
+import { styles } from "./styles";
 
 interface InfoBoxProps {
   icon: ReactNode;
@@ -9,8 +10,8 @@ interface InfoBoxProps {
 
 const InfoBox: FC<InfoBoxProps> = ({ title, icon, children }) => {
   return (
-    <Stack>
-      <Stack direction="row" gap={1} alignItems="center">
+    <Stack sx={styles.root}>
+      <Stack my={1} direction="row" gap={1} alignItems="center">
         {icon}
         <Typography variant="subtitle1">{title}</Typography>
       </Stack>
