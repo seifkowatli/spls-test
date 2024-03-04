@@ -1,5 +1,5 @@
 import { Container, Grid, Toolbar } from "@mui/material";
-import { Chat, GamePlay, Ranking } from "./partials";
+import { Chat, GamePlay, Graph, Ranking } from "./partials";
 
 const Home = () => {
   return (
@@ -7,7 +7,7 @@ const Home = () => {
       <Toolbar />
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}><GamePlay /></Grid>
-        <Grid item xs={12} md={8}>left</Grid>
+        <Grid item xs={12} md={8}><Graph /></Grid>
       </Grid> 
       <Grid container spacing={2}>
         <Grid item xs={12} md={7}><Ranking /></Grid>
