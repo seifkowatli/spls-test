@@ -24,7 +24,7 @@ const Table : FC<TableProps> = ({rows , columns}) => {
         {rows.map((row) => (
           <TableRow>
             {
-              columns.map((column) => (
+              Object.keys(row).map((column) => (
                 <TableCell align="left">{row[column]}</TableCell>
               ))
             }
