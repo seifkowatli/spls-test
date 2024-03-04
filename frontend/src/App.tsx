@@ -1,4 +1,5 @@
 import { Home } from "./pages";
+import './App.css'
 import {
   AppProvider,
   EmotionCacheProvider,
