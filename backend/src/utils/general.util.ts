@@ -7,5 +7,14 @@ export class GeneralUtils {
         (typeof value === 'string' && value.trim().length === 0)
       );
     }
+
+    public static generateRandomFloat(min: number, max: number, decimalPlaces: number): number {
+      const randomNumber = Math.random() * (max - min) + min;
+      return parseFloat(randomNumber.toFixed(decimalPlaces));
+    }
+
+    public static generateRandomInt(min: number, max: number): number {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
   }
   

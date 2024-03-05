@@ -1,15 +1,23 @@
-import { WebSocketGateway, SubscribeMessage, MessageBody } from '@nestjs/websockets';
+import { WebSocketGateway, SubscribeMessage, MessageBody, AbstractWsAdapter, WebSocketServer } from '@nestjs/websockets';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
+import { Server, Socket } from 'socket.io';
+import { RoundDto } from './dto/round.dto';
 
 @WebSocketGateway()
 export class GameGateway {
   constructor(private readonly gameService: GameService) {}
 
+  @WebSocketServer()
+  server: Server;
+
+
   @SubscribeMessage('createGame')
-  create(@MessageBody() createGameDto: CreateGameDto) {
-    return this.gameService.create(createGameDto);
+  async create(@MessageBody() createGameDto: CreateGameDto , client: Socket) {
+    const game =  await this.gameService.create(createGameDto);
+    client.emit('gameCreated', game);
+    return game; 
   }
 
   @SubscribeMessage('findAllGame')
@@ -18,7 +26,7 @@ export class GameGateway {
   }
 
   @SubscribeMessage('findOneGame')
-  findOne(@MessageBody() id: number) {
+  findOne(@MessageBody() id: string) {
     return this.gameService.findOne(id);
   }
 
@@ -28,36 +36,15 @@ export class GameGateway {
   }
 
   @SubscribeMessage('removeGame')
-  remove(@MessageBody() id: number) {
+  remove(@MessageBody() id: string) {
     return this.gameService.remove(id);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @SubscribeMessage('createGame')
-  async handleCreateGame(@MessageBody() { gameId, maxRounds }: { gameId: string; maxRounds: number }, client: Socket) {
-    await this.gameService.createGame(gameId, maxRounds);
-    await this.gameService.joinGame(gameId, client);
-    client.join(gameId);
-    client.emit('gameCreated', gameId);
-  }
 
-  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('startNextRound')
-  async handleStartNextRound(@MessageBody() gameId: string, client: Socket) {
-    await this.gameService.startNextRound(gameId);
+  async handleStartNextRound(@MessageBody() roundDto: RoundDto, client: Socket) {
+    const updatedGame =  await this.gameService.startNextRound(roundDto);
+    this.server.to(roundDto.gameId).emit('roundResults', updatedGame);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @SubscribeMessage('chat')
-  handleChat(@MessageBody() message: string, client: Socket) {
-    const roomId = Object.keys(client.rooms)[1];
-    if (roomId) {
-      this.server.to(roomId).emit('chat', { username: client.id, message });
-    }
-  }
-
-  private leaveGameRoom(client: Socket) {
-    const rooms = Object.keys(client.rooms);
-    rooms.forEach((room) => client.leave(room));
-  }
 }

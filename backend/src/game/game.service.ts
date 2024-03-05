@@ -1,61 +1,70 @@
+import { GamesRepository } from './game.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
+import { Game, GameDocument } from './schemas/game.schema';
+import { GeneralUtils } from 'src/utils/general.util';
+import { RoundDto } from './dto/round.dto';
 
 @Injectable()
 export class GameService {
-  create(createGameDto: CreateGameDto) {
-    return 'This action adds a new game';
-  }
-
-  findAll() {
-    return `This action returns all game`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} game`;
-  }
-
-  update(id: number, updateGameDto: UpdateGameDto) {
-    return `This action updates a #${id} game`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} game`;
-  }
-
-  async createGame(gameId: string) {
-    const game = new this.gameModel({ gameId, players: [] });
-    await game.save();
-  }
-
-  async joinGame(gameId: string, player: Socket) {
-    const game = await this.gameModel.findOne({ gameId });
-    if (game) {
-      game.players.push(player.id);
-      await game.save();
-      player.join(gameId);
-    }
-  }
-
-  async getPlayersInGame(gameId: string): Promise<string[]> {
-    const game = await this.gameModel.findOne({ gameId });
-    return game?.players || [];
-  }
+  constructor (private readonly  gamesRepository : GamesRepository) {}
   
-  async getCurrentRound(gameId: string): Promise<number> {
-    const game = await this.gameModel.findOne({ gameId });
-    return game?.currentRound || 0;
+  create(createGameDto: CreateGameDto) : Promise<GameDocument> {
+    return this.gamesRepository.create(createGameDto);
   }
 
-  async startNextRound(gameId: string) {
-    const game = await this.gameModel.findOne({ gameId });
-    if (game && game.currentRound < game.maxRounds) {
-      game.currentRound += 1;
-      game.roundData = []; // Reset round-specific data
-      await game.save();
-      this.server.to(gameId).emit('nextRound', game.currentRound);
+  findAll()  : Promise<Game[]>{
+    return this.gamesRepository.find({});
+  }
+
+  findOne(id: string) : Promise<Game> {
+    return this.gamesRepository.findOne({_id: id});
+  }
+
+  update(id: string, updateGameDto: UpdateGameDto) : Promise<Game> {
+    return this.gamesRepository.findOneAndUpdate({_id :id} , updateGameDto)
+  }
+
+  remove(id: string) : Promise<number> {
+    return this.gamesRepository.deleteMany({_id: id});
+  }
+
+  getCpuData(botsNumber : number) {
+    const cpuData = [];
+    for (let i = 0; i < botsNumber; i++) {
+      cpuData.push(this.generateCpuEntry(i));
+    }
+    return cpuData;
+  }
+
+  generateCpuEntry(index) { 
+    return { 
+      name : `CPU ${index}`,
+      points: GeneralUtils.generateRandomInt(0, 100),
+      multiplier: GeneralUtils.generateRandomFloat(0, 10 , 2)
     }
   }
 
-}
+  
+  async startNextRound( roundDto: RoundDto) {
+    const game = await this.gamesRepository.findOne({ _id :  roundDto.gameId })  
+      game.round += 1;
+      game.lastRoundData = [
+        {
+          name : 'You',
+          points: roundDto.points,
+          multiplier: roundDto.multiplier
+        },
+        ...this.getCpuData(4)
+      ]; // Reset round-specific data
+      await game.save();
+      return game;
+    }
+  }
+
+
+
+
+
+

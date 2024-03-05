@@ -2,12 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { EntityRepository } from 'src/database/entity.repository';
-import { User, UserDocument } from './schemas/user.schema';
+import { Game, GameDocument } from './schemas/game.schema';
 
 @Injectable()
-export class UsersRepository extends EntityRepository<UserDocument> {
-  constructor(@InjectModel(User.name) userModel: Model<UserDocument>) {
-    super(userModel);
+export class GamesRepository extends EntityRepository<GameDocument> {
+  constructor(@InjectModel(Game.name) GameModel: Model<GameDocument>) {
+    super(GameModel);
   }
-
 }
