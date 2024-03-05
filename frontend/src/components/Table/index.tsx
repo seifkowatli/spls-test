@@ -8,7 +8,7 @@ export interface TableProps {
 
 const Table : FC<TableProps> = ({rows , columns}) => {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer sx={{minHeight : 170}} component={Paper}>
 
     <MuiTable size="small">
       <TableHead sx={{backgroundColor : '#161a21'}}>
@@ -20,8 +20,8 @@ const Table : FC<TableProps> = ({rows , columns}) => {
           }
         </TableRow>
       </TableHead>
-      <TableBody>
-        {rows.map((row) => (
+      <TableBody >
+        {!!rows &&  rows.map((row) => (
           <TableRow>
             {
               Object.keys(row).map((column) => (

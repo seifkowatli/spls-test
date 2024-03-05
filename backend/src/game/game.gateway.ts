@@ -5,7 +5,7 @@ import { UpdateGameDto } from './dto/update-game.dto';
 import { Server, Socket } from 'socket.io';
 import { RoundDto } from './dto/round.dto';
 
-@WebSocketGateway()
+@WebSocketGateway({cors : true})
 export class GameGateway {
   constructor(private readonly gameService: GameService) {}
 
@@ -14,9 +14,10 @@ export class GameGateway {
 
 
   @SubscribeMessage('createGame')
-  async create(@MessageBody() createGameDto: CreateGameDto , client: Socket) {
+  async create(client: Socket , @MessageBody() createGameDto: CreateGameDto) {
     const game =  await this.gameService.create(createGameDto);
-    client.emit('gameCreated', game);
+    this.server.emit('gameCreated', game);
+    console.log('gameCreated', game)
     return game; 
   }
 
@@ -44,7 +45,7 @@ export class GameGateway {
   @SubscribeMessage('startNextRound')
   async handleStartNextRound(@MessageBody() roundDto: RoundDto, client: Socket) {
     const updatedGame =  await this.gameService.startNextRound(roundDto);
-    this.server.to(roundDto.gameId).emit('roundResults', updatedGame);
+    this.server.emit('roundResults', updatedGame);
   }
 
 }

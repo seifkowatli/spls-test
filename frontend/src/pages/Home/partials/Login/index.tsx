@@ -3,8 +3,9 @@ import { useEffect, useState } from "react"
 import { styles } from "./styles"
 import { useAuth } from "~/hooks/resource/useAuth"
 import Cookies from 'js-cookie';
-import { StorageKeys } from "~/configs";
+import { GatewayKeys, StorageKeys } from "~/configs";
 import { useAppState } from "~/providers";
+import useWebSocket from "~/hooks/utils/useWebSocket";
 
 
 const Login = () => {
@@ -13,6 +14,7 @@ const Login = () => {
     const {setAppState , appState} = useAppState()
     const { login}  = useAuth()
     const {mutate , isLoading} = login()
+    const {sendMessage} = useWebSocket()
 
     useEffect(() => {
       if(userName.length > 4) setLoginDisabled(false)
@@ -25,7 +27,6 @@ const Login = () => {
         password : 'abcd',
       }
         mutate(data, {
-
           onSuccess: data => {
             let { token, user } = data;
             Cookies.set(StorageKeys.token, token, { expires: 1 });
@@ -34,6 +35,8 @@ const Login = () => {
               isAuthenticated: true,
               user,
             }));
+
+            sendMessage({player : user._id} , GatewayKeys.game.createGame)
           },
         });
     

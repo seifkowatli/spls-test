@@ -39,7 +39,7 @@ export class UsersService {
     const pointToDecrease =  -points
     return this.usersRepository.findOneAndUpdate(
       { _id: userId },
-      { $inc: { points : pointToDecrease } },
+      { $inc: { points : Number(pointToDecrease) } },
     );
   }
 

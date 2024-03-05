@@ -9,7 +9,7 @@ interface WebSocketHookOptions {
 }
 
 interface WebSocketHookResult {
-  sendMessage: (message: string, eventToSend?: string) => void;
+  sendMessage: (message: any, eventToSend : string) => void;
   receivedData: any;
 }
 
@@ -25,15 +25,15 @@ const useWebSocket = ({
     const newSocket = io(url);
 
     setSocket(newSocket);
-
+    console.log('socket connected')
     return () => {
       newSocket.disconnect();
     };
   }, [url]);
 
-  const sendMessage = (message: string, eventToSend: string = 'sendMessage'): void => {
+  const sendMessage = (message: any, eventToSend: string): void => {
     if (socket) {
-      socket.emit(eventToSend, { message });
+      socket.emit(eventToSend, message );
     }
   };
 

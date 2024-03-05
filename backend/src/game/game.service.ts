@@ -64,7 +64,6 @@ export class GameService {
         ...this.getCpuData(4)
       ]; // Reset round-specific data
       await game.save();
-      await this.usersService.updatePoints(roundDto.userId, roundDto.points * roundDto.multiplier);
       return game;
     }
   }

@@ -3,6 +3,7 @@ export interface User {
   name : string;
   points : string;
   roles: Role[];
+  _id: string;
 }
 
 export interface Role {

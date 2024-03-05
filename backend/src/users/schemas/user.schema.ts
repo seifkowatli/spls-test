@@ -22,7 +22,7 @@ export class User {
   
   @ApiProperty()
   @Prop()
-  points: string;
+  points: number;
 
 }
 
