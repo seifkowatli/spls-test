@@ -1,3 +1,4 @@
+import { UsersService } from './../users/users.service';
 import { GamesRepository } from './game.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateGameDto } from './dto/create-game.dto';
@@ -8,7 +9,10 @@ import { RoundDto } from './dto/round.dto';
 
 @Injectable()
 export class GameService {
-  constructor (private readonly  gamesRepository : GamesRepository) {}
+  constructor (
+    private readonly  gamesRepository : GamesRepository,
+    private readonly  usersService : UsersService
+    ) {}
   
   create(createGameDto: CreateGameDto) : Promise<GameDocument> {
     return this.gamesRepository.create(createGameDto);
@@ -48,7 +52,8 @@ export class GameService {
 
   
   async startNextRound( roundDto: RoundDto) {
-    const game = await this.gamesRepository.findOne({ _id :  roundDto.gameId })  
+    const game = await this.gamesRepository.findOne({ _id :  roundDto.gameId })
+    
       game.round += 1;
       game.lastRoundData = [
         {
@@ -59,6 +64,7 @@ export class GameService {
         ...this.getCpuData(4)
       ]; // Reset round-specific data
       await game.save();
+      await this.usersService.updatePoints(roundDto.userId, roundDto.points * roundDto.multiplier);
       return game;
     }
   }

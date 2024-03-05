@@ -6,6 +6,11 @@ export class RoundDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
+    userId : string;
+    
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
     gameId : string;
 
     @ApiProperty()

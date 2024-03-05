@@ -35,6 +35,14 @@ export class UsersService {
     );
   }
 
+  updatePoints(userId: string, points: number): Promise<User> {
+    const pointToDecrease =  -points
+    return this.usersRepository.findOneAndUpdate(
+      { _id: userId },
+      { $inc: { points : pointToDecrease } },
+    );
+  }
+
   isUserExists(email: string): Promise<any> {
     return this.usersRepository.findOne({ email });
   }
