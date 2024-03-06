@@ -25,6 +25,7 @@ export interface AppState {
   isAuthenticated: boolean;
   game : Game | null;
   newRoundResults : any;
+  startDrawing : boolean;
 }
 
 export interface AppContextProps {

@@ -1,12 +1,12 @@
 import { Paper } from "@mui/material"
-import Graph from "."
+import Graph from "./Graph"
 
-const LinerGraph = () => {
+const LineGraph = () => {
   return (
     <Paper sx={{w : 1 , height : 500}}>
-      <Graph />
+      <Graph/>
     </Paper>
   )
 }
 
-export default LinerGraph
+export default LineGraph

@@ -9,7 +9,8 @@ export const APP_CONTEXT_STATE: AppState = {
       lang: "en",
       theme: "dark",
     },
-    newRoundResults : null 
+    newRoundResults : null,
+    startDrawing : false, 
   };
   
   

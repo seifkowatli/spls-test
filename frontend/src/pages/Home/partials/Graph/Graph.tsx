@@ -1,64 +1,82 @@
-import React, { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import { Container, Graphics, Stage } from '@pixi/react';
+import { useEffect, useState } from 'react';
+import { useAppState } from '~/providers';
 
-interface ExponentialChartProps {
-  a: number;
-  width?: number;
-  height?: number;
-}
-
-const ExponentialChart: React.FC<ExponentialChartProps> = ({ a, width = 500, height = 300 }) => {
-  const ref = useRef(null);
+const Graph = () => {
+  
+  const [progress, setProgress] = useState(0);
+  const {appState : {startDrawing} , setAppState} = useAppState()
 
   useEffect(() => {
-    if (a <= 1) return; // Ensure a > 1
+    let animationFrameId;
 
-    // Setup the SVG canvas
-    const svg = d3.select(ref.current)
-                  .attr("width", width)
-                  .attr("height", height)
-                  .style("border", "1px solid black");
+    const animateDrawing = (startTimestamp) => {
+      const duration = 2000; // Animation duration in milliseconds
+      const elapsed = Date.now() - startTimestamp;
+      const currentProgress = Math.min(1, elapsed / duration);
 
-    // Clear the SVG canvas
-    svg.selectAll("*").remove();
+      setProgress(currentProgress);
 
-    // Define scales
-    const xScale = d3.scaleLinear()
-                     .domain([0, 10]) // Adjust domain to fit your data
-                     .range([0, width]);
+      if (currentProgress < 1) {
+        animationFrameId = requestAnimationFrame((timestamp) => animateDrawing(startTimestamp || timestamp));
+      } else {
+        setAppState((prevState) => ({
+          ...prevState,
+          startDrawing : false
+        }));
+      }
+    };
 
-    const yScale = d3.scaleLinear()
-                     .domain([0, Math.pow(a, 10)]) // Adjust domain based on 'a'
-                     .range([height, 0]);
+    if (startDrawing) {
+      animateDrawing(Date.now());
+    }
 
-    // Generate the line
-    const line = d3.line()
-                   .x((d, i) => xScale(i))
-                   .y(d => yScale(Math.pow(a, d)));
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [startDrawing]);
 
-    // Create a data set
-    const data = d3.range(11); // Generate an array [0, 1, 2, ..., 10]
+  const drawExponentialCurve = (g) => {
+    const startX = 50;
+    const startY = 440;
+    const controlX1 = 100;
+    const controlY1 = 440;
 
-    // Draw the line
-    svg.append("path")
-       .datum(data)
-       .attr("fill", "none")
-       .attr("stroke", "blue")
-       .attr("stroke-width", 2)
-       .attr("d", line);
+    const controlX2 = 650;
+    const controlY2 = 440;
+    
+    const endX = 700;
+    const endY = 50;
 
-    // Add the X Axis
-    svg.append("g")
-       .attr("transform", `translate(0,${height})`)
-       .call(d3.axisBottom(xScale));
 
-    // Add the Y Axis
-    svg.append("g")
-       .call(d3.axisLeft(yScale));
+    // Set line style (2 pixels wide and blue color)
+    g.lineStyle(2, 0xe3397d);
 
-  }, [a, width, height]);
+    // Move the graphics cursor to the starting point of the line
+    g.moveTo(startX, startY);
 
-  return <svg ref={ref}></svg>;
+    // Calculate the current position based on the progress
+    const t = progress;
+    const oneMinusT = 1 - t;
+    const currentX =
+      oneMinusT ** 3 * startX + 3 * oneMinusT ** 2 * t * controlX1 + 3 * oneMinusT * t ** 2 * controlX2 + t ** 3 * endX;
+    const currentY =
+      oneMinusT ** 3 * startY + 3 * oneMinusT ** 2 * t * controlY1 + 3 * oneMinusT * t ** 2 * controlY2 + t ** 3 * endY;
+
+    // Draw a dot at the current position
+    g.beginFill(0xe3397d);
+    g.drawCircle(currentX, currentY, 5);
+    g.endFill();
+  };
+
+  return (
+    <div>
+      <Stage width={800} height={500} options={{ backgroundColor: 0x0f1217 }}>
+        <Container>
+          <Graphics draw={(g) => drawExponentialCurve(g)} />
+        </Container>
+      </Stage>
+    </div>
+  );
 };
 
-export default ExponentialChart;
+
+export default Graph;

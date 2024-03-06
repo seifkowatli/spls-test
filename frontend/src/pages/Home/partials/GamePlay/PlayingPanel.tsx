@@ -7,7 +7,7 @@ import { GatewayKeys } from "~/configs"
 import { useState } from "react"
 
 const PlayingPanel = () => {
-  const { appState } = useAppState();
+  const { appState , setAppState } = useAppState();
   const { sendMessage } = useWebSocket();
   const [points, setPoints] = useState<number>()
   const [multiplier, setMultiplier] = useState<number>()
@@ -19,6 +19,11 @@ const PlayingPanel = () => {
       points,
       multiplier
     }, GatewayKeys.round.nextRound)
+
+    setAppState((prevState) => ({
+      ...prevState,
+      startDrawing : true
+    }));
   }
   return (
     <Stack>

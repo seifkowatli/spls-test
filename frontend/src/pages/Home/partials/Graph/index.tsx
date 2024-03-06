@@ -1,12 +1,12 @@
 import { Stack } from "@mui/material"
-import LinerGraph from "./LinerGraph"
+import LineGraph from "./LinerGraph"
 import PlayerInfo from "./PlayerInfo"
 
 const Graph = () => {
   return (
     <Stack>
         <PlayerInfo />
-        <LinerGraph />
+        <LineGraph />
     </Stack>
   )
 }

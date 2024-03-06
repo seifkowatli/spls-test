@@ -15,7 +15,6 @@
     "@mui/icons-material": "^5.15.11",
     "@mui/material": "^5.15.11",
     "@pixi/react": "^7.1.1",
-    "d3": "^7.8.5",
     "js-cookie": "^3.0.5",
     "pixi.js": "^8.0.0",
     "react": "^18.2.0",
@@ -26,7 +25,6 @@
     "stylis-plugin-rtl": "^2.1.1"
   },
   "devDependencies": {
-    "@types/d3": "^7.4.3",
     "@types/js-cookie": "^3.0.6",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
