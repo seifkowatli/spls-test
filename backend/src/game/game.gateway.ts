@@ -1,3 +1,4 @@
+import { ChatDto } from './dto/chat.dto';
 import { WebSocketGateway, SubscribeMessage, MessageBody, AbstractWsAdapter, WebSocketServer } from '@nestjs/websockets';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
@@ -46,6 +47,11 @@ export class GameGateway {
   async handleStartNextRound(@MessageBody() roundDto: RoundDto, client: Socket) {
     const updatedGame =  await this.gameService.startNextRound(roundDto);
     this.server.emit('roundResults', updatedGame);
+  }
+
+  @SubscribeMessage('chat')
+  handleChat(@MessageBody() chatDto :  ChatDto) {
+      this.server.emit('chat', chatDto);
   }
 
 }

@@ -6,5 +6,6 @@ export const GatewayKeys =  {
     round : { 
         nextRound : 'startNextRound',
         roundResult : 'roundResults'
-    }
+    },
+    chat : 'chat'
 }
