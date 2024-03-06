@@ -24,7 +24,7 @@ const ChatBox = () => {
   
   return (
     <Stack sx={styles.chatBox} direction="row">
-        <InputBase onChange={(e) => setMessage(e.target.value)} sx={styles.messageInput}  />
+        <InputBase value={message} onChange={(e) => setMessage(e.target.value)} sx={styles.messageInput}  />
         <ButtonBase onClick={onSend} sx={styles.chatButton}> Start </ButtonBase>
     </Stack>
   )
