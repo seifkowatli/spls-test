@@ -5,7 +5,7 @@ import { RoundData, useAppState } from "~/providers";
 const Ranking = () => {
   const { appState} = useAppState();
 
-  const orderByPoints = (data: RoundData[]): Any[] => {
+  const orderByPoints = (data: RoundData[]): any[] => {
     let newData  = data.slice().sort((a, b) => b.points - a.points);
     return newData.map((item, index) => ({
       No : index + 1,
