@@ -5,12 +5,17 @@ import { RoundData, useAppState } from "~/providers";
 const Ranking = () => {
   const { appState} = useAppState();
 
-  const orderByPoints = (data: RoundData[]): RoundData[] => {
-    return data.slice().sort((a, b) => b.points - a.points);
+  const orderByPoints = (data: RoundData[]): Any[] => {
+    let newData  = data.slice().sort((a, b) => b.points - a.points);
+    return newData.map((item, index) => ({
+      No : index + 1,
+      Name : item.name,
+      Score : (item.points * item.multiplier).toFixed(2)
+    }))
   }
   return (
     // @ts-ignore
-    <TitledBox title="Ranking" icon={<RankingIcon height={20} width={20} />}>
+    <TitledBox  title="Ranking" icon={<RankingIcon height={20} width={20} />}>
       <Table
         columns={["No.", "Name", "Score"]}
         rows={
